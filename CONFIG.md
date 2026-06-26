@@ -24,3 +24,19 @@ Spark can output the final OnCable delimited (.del) files wherever you specify. 
 ```
 ### Properties
 - **dir**: The folder path of which the composite .del files will be exported to.
+
+## Weather
+Zap2It supports displaying simple weather data and Spark is able to fulfill that thanks to WeatherAPI.com's free tier API. To acquire an API key, [create an account for free](https://www.weatherapi.com/signup.aspx). When you get to your dashboard, you should have an API key displayed that you can copy. Place this into **weatherapi.com-api-key** in your weather.conf file (see [weather.example.conf](https://github.com/Mosenia-Cable/spark/blob/main/weather.example.conf) for format example, or see below). To make sure you have all data fields available, visit "API Response Fields" to the left on your dashboard, and enable all optional fields (hit Save at the bottom!).
+```json
+{
+    "headend": "ZAP2IT",
+    "zipcode": "87901",
+    "locname": "Truth or Consequences",
+    "weatherapi.com-api-key": "your-api-key-goes-here"
+}
+```
+### Properties
+- **headend**: Headend ID used by Zap2It for identification. This must match your installation's headend ID, otherwise it will not display.
+- **zipcode**: ZIP code of the desired location you want to collect weather data for. This could also be a coordinate pair.
+- **locname**: String name of the location you want to display weather data for.
+- **weatherapi.com-api-key**: Your WeatherAPI.com API key, as a string. You can't get weather data without this.
