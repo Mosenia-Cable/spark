@@ -137,9 +137,7 @@ def export(records:list,filename:str,cfg:dict):
         f.close()
     log.info(f"Successfully exported guide data to '{export_path}'")
 
-if __name__ == "__main__":
-    import coloredlogs
-    coloredlogs.install("DEBUG")
+def run():
     channels = get_config('channels')
     # Zap2It looks at DEL files 1 day prior, and 4 days beyond the current date
     # however, for now (and since I know this will work anyway), we will just collect yesterday, today, and tomorrow
@@ -151,3 +149,9 @@ if __name__ == "__main__":
     export_cfg = get_config('export')
     for r, fname in records:
         export(records=r,filename=fname,cfg=export_cfg)
+
+if __name__ == "__main__":
+    import coloredlogs
+    coloredlogs.install("DEBUG")
+    run()
+    

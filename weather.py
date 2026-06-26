@@ -119,8 +119,11 @@ def get_weather_data(cfg:dict):
             export(output_18, os.path.join(export_dir, "18hour.txt")) # export 18 hour
             log.info(f"Collected and exported all weather data for {location} ({zipcode})!")
 
+def run():
+    cfg = get_config("weather")
+    get_weather_data(cfg)
+
 if __name__ == "__main__":
     import coloredlogs
     coloredlogs.install(level="DEBUG")
-    cfg = get_config("weather")
-    get_weather_data(cfg)
+    run()
