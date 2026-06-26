@@ -9,7 +9,7 @@ PROGRAM_DIR = os.path.dirname(os.path.abspath(__file__))
 
 log = logging.getLogger('spark')
 
-def get_config(name:str):
+def get_config(name:str) -> dict:
     '''Attempts to grab a .conf file by root name, and falls back to .example.conf suffix if it fails.'''
     fsuffix = ".conf"
     for i in range(2): # lol
@@ -127,20 +127,33 @@ def parse_and_collect(channels:dict, date:DT.datetime=DT.datetime.now()) -> list
             guide_xml = fetch_guide(endpoint_type, endpoint_url, date)
             if guide_xml:
                 records += XML.XMLTV2DEL(guide_xml, endpoint_target, channel_info)
-                # to-do, process these to a file
-        
-    
-    #log.debug(records)
     datestr = date.strftime("%m%d%Y")
-    filepath = f"{datestr}.del"
-    with open(filepath, "w") as f:
-        for r in records:
-            f.write(f"{r}\n")
+    filename = f"{datestr}.del"
+    return records, filename
 
+def export(records:list,filename:str,cfg:dict):
+    '''Exports the Delimited records list to the filename specified, using the directory defined in export.conf.'''
+    export_cfg = cfg
+    export_dir = export_cfg.get("dir", os.path.join(PROGRAM_DIR, ".export")) # default to local .export if none defined
+    if not os.path.exists(export_dir): os.makedirs(export_dir, exist_ok=True)
+    export_path = os.path.join(export_dir, filename)
+    with open(export_path, "w") as f:
+        for line in records:
+            f.write(f"{line}\n")
+        f.close()
+    log.info(f"Successfully exported guide data to '{export_path}'")
 
 if __name__ == "__main__":
     import coloredlogs
     coloredlogs.install("DEBUG")
     channels = get_config('channels')
-    parse_and_collect(channels)
-    
+    # Zap2It looks at DEL files 1 day prior, and 4 days beyond the current date
+    # however, for now (and since I know this will work anyway), we will just collect yesterday, today, and tomorrow
+    dayminus1 = parse_and_collect(channels, date=DT.datetime.now() - DT.timedelta(days=1))
+    dayzero = parse_and_collect(channels, date=DT.datetime.now())
+    dayplus1 = parse_and_collect(channels, date=DT.datetime.now() + DT.timedelta(days=1))
+    # export them
+    records = [dayminus1, dayzero, dayplus1]
+    export_cfg = get_config('export')
+    for r, fname in records:
+        export(records=r,filename=fname,cfg=export_cfg)
