@@ -221,6 +221,7 @@ __marimo__/
 # Spark, user definitions
 channels.conf
 export.conf
+weather.conf
 # Spark - delimited generations
 *.del
 *.xlsx
