@@ -37,21 +37,28 @@ def get_config(name:str):
 def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime=None) -> None|str:
     '''Fetches XMLTV (as a string) for the appropriate endpoint and the date provided.'''
     guide = None
-    if endpoint_type == "4broadcast":
-        # collect API response from 4broadcast
-        request_date = date.strftime("%m/%d")
-        request_url = f"{endpoint_url}/guide/{request_date}?xmltv=true"
-        r = requests.get(request_url)
-        r.raise_for_status()
-        guide = r.content.decode() # assumes that we received a proper bytestring of XML response
-    elif endpoint_type == "ersatz":
-        # collect the  raw .xmltv file from //ersatz/iptv/xmltv.xml
-        # ersatz generates XMLTV for a day count defined by the operator, we can't target a guide for specific dates. therefore, we'll fetch the same results every time.
-        request_url = f"{endpoint_url}/iptv/xmltv.xml"
-        log.debug(request_url)
-        r = requests.get(request_url)
-        r.raise_for_status()
-        guide = r.content.decode()
+    try:
+        if endpoint_type == "4broadcast":
+            # collect API response from 4broadcast
+            request_date = date.strftime("%m/%d")
+            request_url = f"{endpoint_url}/guide/{request_date}?xmltv=true"
+            r = requests.get(request_url, timeout=10)
+            r.raise_for_status()
+            guide = r.content.decode() # assumes that we received a proper bytestring of XML response
+        elif endpoint_type == "ersatz":
+            # collect the  raw .xmltv file from //ersatz/iptv/xmltv.xml
+            # ersatz generates XMLTV for a day count defined by the operator, we can't target a guide for specific dates. therefore, we'll fetch the same results every time.
+            request_url = f"{endpoint_url}/iptv/xmltv.xml"
+            log.debug(request_url)
+            r = requests.get(request_url, timeout=10)
+            r.raise_for_status()
+            guide = r.content.decode()
+    except requests.exceptions.ConnectionError:
+        log.error(f"Connection request to '{request_url}' failed!")
+    except requests.exceptions.Timeout:
+        log.error(f"Connection request to '{request_url}' timed out!")
+    except:
+        log.error(f"An unhandled error occurred while trying to connect to '{request_url}'",exc_info=True)
     return guide
 
 def parse_and_collect(channels:dict, date:DT.datetime=DT.datetime.now()) -> list:
