@@ -70,18 +70,18 @@ def conv_program(program:ET.Element, channel_info:dict):
     # program type + category/genre objects
     PROGRAM_TYPES = { # maybe move this to a .conf file for ease of customization?
         # definitions match OnCable program type codes
-        "Series": "0", "Music": "0", "Drama": "0", "Sitcom": "0", # Default
-        "Movie":"1", "Movies": "1", "Film": "1", # Movie
-        "Sports": "5", # Sports
-        "News": "25", # News
-        "Kids": "12", "Cartoons": "17", "Cartoon": "17" # Kids
+        "series": "0", "music": "0", "drama": "0", "sitcom": "0", # Default
+        "movie":"1", "movies": "1", "film": "1", # Movie
+        "sports": "5", # Sports
+        "news": "25", # News
+        "kids": "12", "cartoons": "17", "cartoon": "17" # Kids
     }
     p_genres = program.findall("category")
     category = "Unknown"
     program_type = "0" # default to normal program if we no category was specified
     for c in p_genres:
-        category = c.text # overwriting category will at least give us something, even if not matched to program type
-        program_type = PROGRAM_TYPES.get(category, "0") # look up the category in the dict
+        category = c.text.capitalize() # overwriting category will at least give us something, even if not matched to program type
+        program_type = PROGRAM_TYPES.get(category.lower(), "0") # look up the category in the dict
         if program_type: break # grab the first match as the absolute definition
         # to-do: create a priority system, because a "Cartoon" category may also be a "Series" category
     # actor object
