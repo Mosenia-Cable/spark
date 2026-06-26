@@ -1,4 +1,4 @@
-import os, json
+import os
 import logging
 import datetime as DT
 import requests
