@@ -34,7 +34,7 @@ def get_config(name:str):
     log.error(f"No configuration was loaded for '{name}', Spark may not operate correctly (or not at all)!")
     return {} # blank dict
 
-def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime) -> None|str:
+def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime=None) -> None|str:
     '''Fetches XMLTV (as a string) for the appropriate endpoint and the date provided.'''
     guide = None
     if endpoint_type == "4broadcast":
@@ -44,7 +44,14 @@ def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime) -> None|str
         r = requests.get(request_url)
         r.raise_for_status()
         guide = r.content.decode() # assumes that we received a proper bytestring of XML response
-    
+    elif endpoint_type == "ersatz":
+        # collect the  raw .xmltv file from //ersatz/iptv/xmltv.xml
+        # ersatz generates XMLTV for a day count defined by the operator, we can't target a guide for specific dates. therefore, we'll fetch the same results every time.
+        request_url = f"{endpoint_url}/iptv/xmltv.xml"
+        log.debug(request_url)
+        r = requests.get(request_url)
+        r.raise_for_status()
+        guide = r.content.decode()
     return guide
 
 def parse_and_collect(channels:dict, date:DT.datetime=DT.datetime.now()) -> list:
@@ -74,9 +81,15 @@ def parse_and_collect(channels:dict, date:DT.datetime=DT.datetime.now()) -> list
         endpoint_target = channel.get("target_id", None) # if unspecified, we'll just grab the first channel in XMLTV
         guide_xml = fetch_guide(endpoint_type, endpoint_url, date)
         if guide_xml:
-            XML.XMLTV2DEL(guide_xml, endpoint_target, channel_info)
+            records += XML.XMLTV2DEL(guide_xml, endpoint_target, channel_info)
             # to-do, process these to a file
-
+    
+    log.debug(records)
+    datestr = date.strftime("%m%d%Y")
+    filepath = f"{datestr}.del"
+    with open(filepath, "w") as f:
+        for r in records:
+            f.write(f"{r}\n")
 
 
 if __name__ == "__main__":
