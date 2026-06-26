@@ -1,4 +1,4 @@
-'''Processes the XMLTV data'''
+'''Processes the XMLTV data into OnCable delimited string lines.'''
 import logging
 log = logging.getLogger(__name__)
 import xml.etree.ElementTree as ET
