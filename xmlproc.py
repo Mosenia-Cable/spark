@@ -20,8 +20,8 @@ def conv_program(program:ET.Element, channel_info:dict):
     p_stop_time = program.attrib.get("stop") # e.g. 20260623000000 -0500
     p_release = program.find("date") # e.g. 20040218
     if p_release: p_release = p_release.text # date code is in the text of this tag
-    DT_START = DT.datetime.strptime(p_start_time, "%Y%m%d%H%M%S %z")
-    DT_STOP = DT.datetime.strptime(p_stop_time, "%Y%m%d%H%M%S %z")
+    DT_START = DT.datetime.strptime(p_start_time, "%Y%m%d%H%M%S %z").astimezone(tz=DT.timezone.utc) # zap2it processes program data in UTC.
+    DT_STOP = DT.datetime.strptime(p_stop_time, "%Y%m%d%H%M%S %z").astimezone(tz=DT.timezone.utc) # UGHHHH has to be UTC. i hate UTC
     DT_RELEASE = None
     if p_release: DT_RELEASE = DT.datetime.strptime(p_release, "%Y%m%d") # convert to datetime if we found one
     year = ""
@@ -183,6 +183,9 @@ def conv_program(program:ET.Element, channel_info:dict):
         is_HD, # Y/N indicator of HD or SD
         subch # subchannel number 
     ])
+    DEL = DEL.replace("\n","") # no new lines!
+    DEL = DEL.encode("ascii",errors="ignore") # encode into ASCII to eliminate yucky Unicode
+    DEL = DEL.decode("ascii") # decode bytes back to ASCII text
 
     return DEL # return our delimited string
 
