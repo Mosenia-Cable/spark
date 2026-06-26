@@ -18,7 +18,7 @@ def get_config(name:str) -> dict:
                 with open(fpath, "r") as f:
                     config = json.load(f)
                     f.close()
-                log.info(f"Config '{name}' load was successful.")
+                log.debug(f"Config '{name}' load was successful.")
                 return config
             except json.JSONDecodeError:
                 log.error(f"Failed to decode '{fname}', malformed JSON.")

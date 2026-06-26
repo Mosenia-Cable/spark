@@ -239,9 +239,13 @@ def XMLTV2DEL(xmltv:str, target_channel_id:str|None, channel_info:dict) -> list[
     # now process programs
     PROGRAMS_DEL = []
     programs = tree.findall("programme")
+    programs_for_this_channel = 0
+    channel_num = channel_info.get("ch_num")
     for program in programs:
         if program.attrib.get("channel") == target_channel_id:
+            programs_for_this_channel += 1 # keep track of how many programs are actually available for this channel id
             DEL_prog = conv_program(program, channel_info=channel_info)
             PROGRAMS_DEL.append(DEL_prog)
-    log.debug(PROGRAMS_DEL)
+    log.info(f"Converted {len(PROGRAMS_DEL)}/{programs_for_this_channel} programs to OnCable delimited format for channel ID '{target_channel_id}' ({channel_num})") # show amount successfully converted
+    #log.debug(PROGRAMS_DEL)
     return PROGRAMS_DEL

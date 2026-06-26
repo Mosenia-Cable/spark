@@ -121,6 +121,8 @@ def parse_and_collect(channels:dict, date:DT.datetime=DT.datetime.now()) -> list
             guide_xml = fetch_guide(endpoint_type, endpoint_url, date)
             if guide_xml:
                 records += XML.XMLTV2DEL(guide_xml, endpoint_target, channel_info)
+        logdatestr = date.strftime("%m/%d/%Y")
+        log.info(f"Built {logdatestr}'s guide data for channel {channel_number}")
     datestr = date.strftime("%m%d%Y")
     filename = f"{datestr}.del"
     return records, filename
