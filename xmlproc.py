@@ -81,7 +81,7 @@ def conv_program(program:ET.Element, channel_info:dict):
     program_type = "0" # default to normal program if we no category was specified
     for c in p_genres:
         category = c.text # overwriting category will at least give us something, even if not matched to program type
-        program_type = PROGRAM_TYPES.get(category, None) # look up the category in the dict
+        program_type = PROGRAM_TYPES.get(category, "0") # look up the category in the dict
         if program_type: break # grab the first match as the absolute definition
         # to-do: create a priority system, because a "Cartoon" category may also be a "Series" category
     # actor object
