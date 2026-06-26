@@ -14,3 +14,13 @@ Spark can be configured to collect channel guide data from your desired sources 
 - **endpoint**: The URL of the 4broadcast API endpoint to collect from. This is only used if **type** is "4broadcast" or "ersatz".
 - **target_id**: The string of the desired channel ID to collect data from in the fetched XMLTV response. If left blank or null, Spark will use the first channel ID it finds in the XMLTV (helpful if you're using 4broadcast API, as only one channel should be present).
 - **program**: Only used if **type** is "static". Holds a dict object which contains keys mapping the guide data as defined by you. See [channels.example.conf](https://github.com/Mosenia-Cable/spark/blob/main/channels.example.conf) for an example of what values you can define.
+
+## Export Definitions
+Spark can output the final OnCable delimited (.del) files wherever you specify. By default, it's ".export" in the program's local folder, but you can overwrite this by creating an export configuration file. See [export.example.conf](https://github.com/Mosenia-Cable/spark/blob/main/export.example.conf). The export config file is only probed for one value at this time, "dir", as the final destination for the delimited files.
+```json
+{
+    "dir": "C:\\Zap2It\\OnCable\\EXPORT\\ZAP2IT"
+}
+```
+### Properties
+- **dir**: The folder path of which the composite .del files will be exported to.
