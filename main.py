@@ -3,6 +3,7 @@ import logging
 import datetime as DT
 import requests
 import xmlproc as XML
+import staticproc as STATIC
 
 PROGRAM_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -119,10 +120,15 @@ def parse_and_collect(channels:dict, date:DT.datetime=DT.datetime.now()) -> list
         endpoint_url = channel.get("endpoint", None)
         endpoint_type = channel.get("type", "4broadcast") # assume 4broadcast if unspecified
         endpoint_target = channel.get("target_id", None) # if unspecified, we'll just grab the first channel in XMLTV
-        guide_xml = fetch_guide(endpoint_type, endpoint_url, date)
-        if guide_xml:
-            records += XML.XMLTV2DEL(guide_xml, endpoint_target, channel_info)
-            # to-do, process these to a file
+        if endpoint_type == "static":
+            program_info = channel.get("program", {})
+            records.append(STATIC.DICT2DEL(channel_info, program_info, date)) # only one line is generated
+        else:
+            guide_xml = fetch_guide(endpoint_type, endpoint_url, date)
+            if guide_xml:
+                records += XML.XMLTV2DEL(guide_xml, endpoint_target, channel_info)
+                # to-do, process these to a file
+        
     
     #log.debug(records)
     datestr = date.strftime("%m%d%Y")
