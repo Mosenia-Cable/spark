@@ -220,3 +220,10 @@ __marimo__/
 
 # Spark, user definitions
 channels.conf
+export.conf
+# Spark - delimited generations
+*.del
+*.xlsx
+
+# zap2it-GuideScraping - configs
+zap2it-GuideScraping/zap2itconfig.ini
