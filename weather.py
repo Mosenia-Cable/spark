@@ -1,6 +1,6 @@
 import logging
 log = logging.getLogger(__name__)
-import time, os, requests, sys, json, pytz
+import os, requests, pytz
 from datetime import datetime as DT
 from common import get_config
 
