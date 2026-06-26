@@ -137,7 +137,7 @@ def conv_program(program:ET.Element, channel_info:dict):
     p_tmsid = program.findall("episode-num")
     for i in p_tmsid:
         if i.attrib.get("system") == "dd_progid":
-            tmsid = p_tmsid.text.strip(".") # in the zap2it data, the TMSID exists but does NOT have a decimal point for the last 4 digits
+            tmsid = i.text.replace(".","") # in the zap2it data, the TMSID exists but does NOT have a decimal point for the last 4 digits
     # is it HD? object
     is_HD = "N" # default to no
     HD_VALUES = ["HDTV", "HD", "4K", "4KTV", "1920X1080", "2560X1080", "1440X1080"] # just abiding by XMLTV, i guess? forced to uppercase for consistency
