@@ -21,7 +21,7 @@ if __name__ == "__main__":
                 log.info(f"Updated channel guide data!")
             except:
                 log.error(f"main.py encountered an unhandled error!", exc_info=True)
-        if time.time() > LAST_WX_STAMP + EXPIRE_GUIDE_INTERVAL:
+        if time.time() > LAST_WX_STAMP + EXPIRE_WX_INTERVAL:
             log.info("Updating weather data...")
             try:
                 weather.run() # run weather processing loop
