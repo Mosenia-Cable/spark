@@ -68,7 +68,7 @@ def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime=None) -> Non
                 else:
                     try: # time to attempt to collect via z2iGS. this is happening under a try/except, because any number of exceptions could occur from z2iGS not related to Spark.
                         log.info(f"Attempting to scrape Gracenote for guide data via zap2it-GuideScraping...")
-                        os.system(f"cd {z2iGS_folder_path} && py zap2it-GuideScrape.py -o {target_path}")
+                        os.system(f'cd {z2iGS_folder_path} && py zap2it-GuideScrape.py -o "{target_path}"')
                         if os.path.exists(target_path): log.info(f"Success! XMLTV was dumped as '{target_filename}'.")
                         else: log.error(f"Failed! zap2it-GuideScrape.py did not export an XMLTV file! Please check above for any possible errors.")
                     except:
