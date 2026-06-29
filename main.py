@@ -12,7 +12,7 @@ log = logging.getLogger('spark')
 
 
 
-def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime=None) -> None|str:
+def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime=None) -> str:
     '''Fetches XMLTV (as a string) for the appropriate endpoint and the date provided.'''
     guide = None
     request_url = None

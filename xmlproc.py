@@ -189,7 +189,7 @@ def conv_program(program:ET.Element, channel_info:dict):
 
     return DEL # return our delimited string
 
-def get_station_name(display_names:list[ET.Element]):
+def get_station_name(display_names:list):
     '''Returns the best available display name as a string from a provided list of <display-name> tags.'''
     names = []
     for item in display_names:
@@ -214,7 +214,7 @@ def get_station_name(display_names:list[ET.Element]):
     return best_name
     
 
-def XMLTV2DEL(xmltv:str, target_channel_id:str|None, channel_info:dict) -> list[str]: # DEL? ...like Delamain?
+def XMLTV2DEL(xmltv:str, target_channel_id:str, channel_info:dict) -> list: # DEL? ...like Delamain?
     # digest string to actual XML
     tree = ET.fromstring(xmltv)
     # get the target channel id from the channels list, if not provided
