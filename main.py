@@ -15,6 +15,7 @@ log = logging.getLogger('spark')
 def fetch_guide(endpoint_type:str,endpoint_url:str,date:DT.datetime=None) -> None|str:
     '''Fetches XMLTV (as a string) for the appropriate endpoint and the date provided.'''
     guide = None
+    request_url = None
     endpoint_type = endpoint_type.lower() # lowercase for consistency
     try:
         if endpoint_type == "4broadcast":
