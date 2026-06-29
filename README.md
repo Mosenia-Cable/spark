@@ -22,5 +22,15 @@ Configuring Spark to collect channel data from your desired sources is simple an
 - [Weather](https://github.com/Mosenia-Cable/spark/blob/main/CONFIG.md#weather)
 
 The example.conf files will be loaded if a .conf file with the root name (i.e. "channels" or "export") is not found in the program directory. You have to create the .conf files, the example.conf files are there as a reference of how you can configure them.
+# Running
+There are two default ways to run Spark, but you are welcome to set it up to run however you please (system service, etc)! You can run **main.py** which will fetch your guide data based on the channels config and export to the defined directory in the export config, as a single-use run. 
+```bash
+python3 main.py
+```
+Or, you can run **loop.py** which will frequently auto-collect the channel guide and weather data based on the time intervals defined inside of the script. 
+```bash
+python3 loop.py
+```
+ADditionally, running **weather.py** manually will collect the weather data and export, as a single run.
 # Special thanks
 This project would not have been possible without the existing contributions of [**the XMLTV project**](https://github.com/xmltv/xmltv), [**zap2it-GuideScraping**](https://github.com/daniel-widrick/zap2it-GuideScraping/tree/main), and [**PajamaFrix**](https://github.com/PajamaFrix) + [his reverse-engineering of the OnCable Delimited guide data formats](https://park-city.club/~frix/oncable/delimited-schema.html). Please show some appreciation for all involved!
