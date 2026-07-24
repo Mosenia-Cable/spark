@@ -193,9 +193,10 @@ def get_station_name(display_names:list):
     '''Returns the best available display name as a string from a provided list of <display-name> tags.'''
     names = []
     for item in display_names:
-        text = item.text.strip() if hasattr(item, "text") else str(item).strip()
-        if text:
-            names.append(text)
+        if isinstance(item.text, str):
+            text = item.text.strip() if hasattr(item, "text") else str(item).strip()
+            if text:
+                names.append(text)
     if not names: # there were no names to parse...?
         return "ERROR" # return default string
     
